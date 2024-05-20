@@ -2,6 +2,7 @@
     {
         "label": "section 1",
         "id": "section-1",
+        "description": "Pythonの基本的な構文について学びます。",
         "items": [
             {
                 "name": "print()",
