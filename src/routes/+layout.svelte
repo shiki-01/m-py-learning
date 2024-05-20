@@ -58,10 +58,10 @@
 </main>
 
 <style lang="scss">
+	:global(body) {
+		@apply dark:bg-gray-600;
+	}
 	.bread {
 		padding: 1rem;
-	}
-	main {
-		min-height: 100vh;
 	}
 </style>
