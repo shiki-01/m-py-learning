@@ -2,7 +2,6 @@
     {
         "label": "section 1",
         "id": "section-1",
-        "description": "基本的な文字などの操作を確認しよう",
         "items": [
             {
                 "name": "print()",
