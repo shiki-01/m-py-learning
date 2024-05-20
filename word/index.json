@@ -1,6 +1,7 @@
 [
     {
         "label": "section 1",
+        "id": "1",
         "items": [
             {
                 "name": "print()",
