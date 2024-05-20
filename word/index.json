@@ -1,0 +1,77 @@
+[
+    {
+        "label": "section 1",
+        "items": [
+            {
+                "name": "print()",
+                "description": "() ではさんだ中身を出力します。",
+                "syntax": "print(出力したいもの)"
+            },
+            {
+                "name": "input()",
+                "description": "ユーザーに入力を求める関数です。",
+                "syntax": "input(表示したいメッセージ)"
+            },
+            {
+                "name": "int()",
+                "description": "文字列を整数に変換します。",
+                "syntax": "int(変換したい文字列)"
+            },
+            {
+                "name": "float()",
+                "description": "文字列を浮動小数点数に変換します。",
+                "syntax": "float(変換したい文字列)"
+            },
+            {
+                "name": "str()",
+                "description": "数値を文字列に変換します。",
+                "syntax": "str(変換したい数値)"
+            },
+            {
+                "name": "len()",
+                "description": "文字列の長さを取得します。",
+                "syntax": "len(文字列)"
+            },
+            {
+                "name": "type()",
+                "description": "変数のデータ型を取得します。",
+                "syntax": "type(変数)"
+            },
+            {
+                "name": "range()",
+                "description": "指定した範囲の数値を生成します。",
+                "syntax": "range(開始, 終了, ステップ)"
+            },
+            {
+                "name": "list()",
+                "description": "リストを生成します。",
+                "syntax": "list()"
+            },
+            {
+                "name": "tuple()",
+                "description": "タプルを生成します。",
+                "syntax": "tuple()"
+            },
+            {
+                "name": "dict()",
+                "description": "辞書を生成します。",
+                "syntax": "dict()"
+            },
+            {
+                "name": "set()",
+                "description": "セットを生成します。",
+                "syntax": "set()"
+            },
+            {
+                "name": "sorted()",
+                "description": "リストをソートします。",
+                "syntax": "sorted(リスト)"
+            },
+            {
+                "name": "sum()",
+                "description": "リストの合計を取得します。",
+                "syntax": "sum(リスト)"
+            }
+        ]
+    }
+]
