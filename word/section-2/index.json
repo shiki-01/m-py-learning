@@ -1,0 +1,43 @@
+{
+    "items": [
+        {
+            "name": "str",
+            "description": "文字列型のデータを表す型",
+        },
+        {
+            "name": "len()",
+            "description": "カッコ内の文字列の文字数を返す関数",
+            "syntax": "len(文字列)"
+        },
+        {
+            "name": "str.find()",
+            "description": "文字列内で指定した値が最初に出現する位置を返すメソッド",
+            "syntax": "文字列.find(検索文字列)"
+        },
+        {
+            "name": "str.index()",
+            "description": "文字列内で指定した値が最初に出現する位置を返すメソッド。値が存在しない場合はエラーを返す",
+            "syntax": "文字列.index(検索文字列)"
+        },
+        {
+            "name": "str.count()",
+            "description": "文字列内で指定した値が出現する回数を返すメソッド",
+            "syntax": "文字列.count(検索文字列)"
+        },
+        {
+            "name": "str.replace()",
+            "description": "文字列内の指定した値を別の値に置換するメソッド",
+            "syntax": "文字列.replace(検索文字列, 置換文字列)"
+        },
+        {
+            "name": "str.split()",
+            "description": "文字列を指定した区切り文字で分割し、リストとして返すメソッド",
+            "syntax": "文字列.split(区切り文字)"
+        },
+        {
+            "name": "str.join()",
+            "description": "指定した文字列をリストの各要素間に挿入して、一つの文字列として返すメソッド",
+            "syntax": "区切り文字.join(リスト)"
+        }
+    ]
+}
