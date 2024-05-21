@@ -4,6 +4,7 @@
 	import { page } from '$app/stores';
 
 	interface Question {
+		[x: string]: any;
 		question: string;
 		answer: string;
 	}
