@@ -29,7 +29,7 @@
 		const { params } = await $page;
 		id = params.id;
 
-		const isDev = true;
+		const isDev = false;
 
 		if (isDev) {
 			contentData = {
