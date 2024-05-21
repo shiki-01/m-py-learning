@@ -5,7 +5,7 @@
     let words: any[] = [];
 
     onMount(() => {
-        fetch('https://raw.githubusercontent.com/shiki-01/m-py-learning/master/word/index.json')
+        fetch('https://raw.githubusercontent.com/shiki-01/m-py-learning/master/assets/word/index.json')
             .then((response) => response.json())
             .then((data) => (words = data));
     });

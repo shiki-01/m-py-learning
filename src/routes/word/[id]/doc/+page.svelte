@@ -63,7 +63,7 @@
 				]
 			};
 		} else {
-			fetch(`https://raw.githubusercontent.com/shiki-01/m-py-learning/master/word/${id}/index.json`)
+			fetch(`https://raw.githubusercontent.com/shiki-01/m-py-learning/master/assets/word/${id}/index.json`)
 				.then((response) => response.json())
 				.then((data: { items: Item[]; doc: {} }) => {
 					console.log(data);
