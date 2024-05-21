@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { Card, Button } from 'flowbite-svelte';
 	import { page } from '$app/stores';
+	import Section1 from '$lib/Doc/Section1.svelte';
 
 	interface Item {
 		name: string;
@@ -9,15 +10,9 @@
 		syntax: string;
 	}
 
-	interface Word {
-		label: string;
-		id: string;
-		items: Item[];
-	}
-
-	let data = null;
 	let flipped: { [key: string]: boolean } = {};
 	let id: string;
+	let contentData;
 	let itemsInItem: Item[] = [];
 
 	onMount(async () => {
@@ -26,16 +21,15 @@
 
 		fetch(`https://raw.githubusercontent.com/shiki-01/m-py-learning/master/word/${id}/index.json`)
 			.then((response) => response.json())
-			.then((data: { items: Item[] }) => {
+			.then((data: { items: Item[]; doc: {} }) => {
 				// 'items'キーの下にある配列を取得
+				console.log(data);
 				itemsInItem = data.items;
 				itemsInItem.forEach((item) => (flipped[item.name] = false));
-			});
 
-		const response = await fetch(`https://raw.githubusercontent.com/shiki-01/m-py-learning/master/word/${id}/index.svelte`);
-    	if (response.ok) {
-      		data = await response.text();
-    	}
+				// 'doc'キーの下にあるオブジェクトを取得
+				contentData = data.doc;
+			});
 	});
 
 	function flip(itemName: string) {
@@ -73,12 +67,11 @@
 		</div>
 	{/each}
 </div>
-{#if data}
-  <div>
-    {data}
-  </div>
-{:else}
-  <div>Loading...</div>
+<h1>{contentData && contentData.doc ? contentData.doc.title : 'Default Title'}</h1>
+{#if contentData && contentData.doc && contentData.doc.content}
+	{#each contentData.doc.content as item}
+		<p>{item.text}</p>
+	{/each}
 {/if}
 
 <style lang="scss">
