@@ -3,6 +3,7 @@
         {
             "name": "str",
             "description": "文字列型のデータを表す型",
+            "syntax": ""
         },
         {
             "name": "len()",
