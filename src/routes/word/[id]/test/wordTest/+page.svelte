@@ -23,21 +23,17 @@
     let correctAnswersCount: number = 0;
 
     onMount(async () => {
-        const { params } = await $page;
-        id = params.id;
+    const { params } = await $page;
+    id = params.id;
 
-        fetch((`https://raw.githubusercontent.com/shiki-01/m-py-learning/master/word/${id}/index.json`)
-            .then((response) => response.json())
-            .then((data: Word[]) => {
-                words = data;
-                const word = words.find((word) => word.id === id);
-                if (word) {
-                    itemsInItem = word.items;
-                    // Shuffle the items for random questions
-                    itemsInItem.sort(() => Math.random() - 0.5);
-                }
-            });
-    });
+    fetch(`https://raw.githubusercontent.com/shiki-01/m-py-learning/master/word/${id}/index.json`)
+        .then((response) => response.json())
+        .then((data: { items: Item[] }) => {
+            itemsInItem = data.items;
+            // Shuffle the items for random questions
+            itemsInItem.sort(() => Math.random() - 0.5);
+        });
+});
 
     function checkAnswer() {
         const item = itemsInItem[currentQuestionIndex];

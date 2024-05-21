@@ -26,13 +26,10 @@
 
 		fetch(`https://raw.githubusercontent.com/shiki-01/m-py-learning/master/word/${id}/index.json`)
 			.then((response) => response.json())
-			.then((data: Word[]) => {
-				words = data;
-				const word = words.find((word) => word.id === id);
-				if (word) {
-					itemsInItem = word.items;
-					itemsInItem.forEach((item) => (flipped[item.name] = false));
-				}
+			.then((data: { items: Item[] }) => {
+				// 'items'キーの下にある配列を取得
+				itemsInItem = data.items;
+				itemsInItem.forEach((item) => (flipped[item.name] = false));
 			});
 	});
 
@@ -44,7 +41,7 @@
 <div class="flex justify-center">
 	<Button class="w-fit" on:click={() => (location.href = `/word/${id}/test`)}>Start Test !</Button>
 </div>
-<div class="pt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+<div class="grid grid-cols-1 gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3">
 	{#each itemsInItem as item}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div
