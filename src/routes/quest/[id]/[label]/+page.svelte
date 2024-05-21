@@ -64,46 +64,60 @@
 		}
 
 		if (!window.pyodide) {
-            console.error('Pyodide is not initialized yet');
-            return;
-        }
+			console.error('Pyodide is not initialized yet');
+			return;
+		}
 
-        if (currentQuestionIndex >= itemsInItem.length) {
-            modalContent = 'テストが終了しました！ 正解数：' + correctAnswersCount;
-            defaultModal = true;
-            return;
-        }
+		if (currentQuestionIndex >= itemsInItem.length) {
+			modalContent = 'テストが終了しました！ 正解数：' + correctAnswersCount;
+			defaultModal = true;
+			return;
+		}
 
-        const currentQuestion = itemsInItem[currentQuestionIndex];
-        try {
-            // Pythonの標準出力を一時的にリダイレクトします
-            window.pyodide.runPython('import sys, io');
-            window.pyodide.runPython('originalStdout = sys.stdout; sys.stdout = io.StringIO()');
+		const currentQuestion = itemsInItem[currentQuestionIndex];
+		try {
+			// Pythonの標準出力を一時的にリダイレクトします
+			window.pyodide.runPython('import sys, io');
+			window.pyodide.runPython('originalStdout = sys.stdout; sys.stdout = io.StringIO()');
 
-            // ここでPythonコードを実行します
-            await window.pyodide.runPythonAsync(userAnswer);
+			// advanceフィールドが存在する場合、そのコードを先に実行します
+			if (currentQuestion.advance) {
+				await window.pyodide.runPythonAsync(currentQuestion.advance);
+			}
 
-            // Pythonの標準出力を取得します
-            const result = window.pyodide.runPython('sys.stdout.getvalue()');
+			// ここでPythonコードを実行します
+			await window.pyodide.runPythonAsync(userAnswer);
 
-            // Pythonの標準出力を元に戻します
-            window.pyodide.runPython('sys.stdout = originalStdout');
+			// Pythonの標準出力を取得します
+			const result = window.pyodide.runPython('sys.stdout.getvalue()');
 
-            console.log(result);
-            console.log(currentQuestion.answer);
-            if (result.trim() === currentQuestion.answer) {
-                modalContent = '正解！';
-                correctAnswersCount++;
-            } else {
-                modalContent = '不正解… 答えは ' + currentQuestion.answer;
-            }
-        } catch (error) {
-            console.error('Error running Python code:', error);
-        }
-        defaultModal = true;
-        userAnswer = '';
-        currentQuestionIndex++;
-    };
+			// Pythonの標準出力を元に戻します
+			window.pyodide.runPython('sys.stdout = originalStdout');
+
+			console.log(result);
+			console.log(currentQuestion.answer);
+			if (result.trim() === currentQuestion.answer) {
+				modalContent = '正解！';
+				correctAnswersCount++;
+			} else {
+				// debugフィールドが存在する場合、そのコードを実行してエラーメッセージを生成します
+				if (currentQuestion.debug) {
+					// advanceフィールドをdebugフィールドで上書きします
+					await window.pyodide.runPythonAsync(currentQuestion.debug);
+					const debugResult = window.pyodide.runPython('sys.stdout.getvalue()');
+					modalContent =
+						'不正解… 答えは ' + currentQuestion.answer + ' デバッグ結果: ' + debugResult;
+				} else {
+					modalContent = '不正解… 答えは ' + currentQuestion.answer;
+				}
+			}
+		} catch (error) {
+			console.error('Error running Python code:', error);
+		}
+		defaultModal = true;
+		userAnswer = '';
+		currentQuestionIndex++;
+	};
 </script>
 
 {#if itemsInItem[currentQuestionIndex]}
