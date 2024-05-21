@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Card, Button } from 'flowbite-svelte';
+	import { Card, Button, P, Gallery } from 'flowbite-svelte';
 	import { page } from '$app/stores';
-	import Section1 from '$lib/Doc/Section1.svelte';
 
 	interface Item {
 		name: string;
@@ -23,7 +22,6 @@
 			.then((response) => response.json())
 			.then((data: { items: Item[]; doc: {} }) => {
 				// 'items'キーの下にある配列を取得
-				console.log(data);
 				itemsInItem = data.items;
 				itemsInItem.forEach((item) => (flipped[item.name] = false));
 
@@ -37,42 +35,29 @@
 	}
 </script>
 
-<div class="flex justify-center">
+<div class="mb-4 flex justify-center gap-4">
 	<Button class="w-fit" on:click={() => (location.href = `/word/${id}/test`)}>Start Test !</Button>
+	<Button class="w-fit" on:click={() => (location.href = `/word/${id}/doc`)}>Learn more !</Button>
 </div>
-<div class="grid-auto-rows grid grid-cols-1 gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3">
+<Gallery class="mt-4 gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 	{#each itemsInItem as item}
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div
-			class="card relative h-auto min-h-[64px]"
-			class:flipped={flipped[item.name]}
-			on:click={() => flip(item.name)}
-		>
-			<div class="card-face card-front absolute inset-0">
-				<Card>
-					<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-						{item.name}
-					</h5>
-				</Card>
-			</div>
-			<div class="card-face card-back absolute inset-0">
-				<Card>
-					<div class="card-con">
-						<p class="mb-3 font-normal leading-tight text-gray-700 dark:text-gray-400">
-							{item.description}
-						</p>
-					</div>
-				</Card>
-			</div>
+	<div class="card relative h-auto min-h-[64px]" class:flipped={flipped[item.name]} on:click={() => flip(item.name)}>
+		<div class="card-face card-front absolute inset-0">
+			<Card>
+				<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{item.name}</h5>
+			</Card>
 		</div>
+		<div class="card-face card-back absolute inset-0">
+			<Card>
+				<div class="card-con">
+					<P class="mb-3 font-normal leading-tight text-gray-700 dark:text-gray-400">{item.description}</P>
+				</div>
+			</Card>
+		</div>
+	</div>
 	{/each}
-</div>
-<h1>{contentData && contentData.doc ? contentData.doc.title : 'Default Title'}</h1>
-{#if contentData && contentData.doc && contentData.doc.content}
-	{#each contentData.doc.content as item}
-		<p>{item.text}</p>
-	{/each}
-{/if}
+</Gallery>
+
 
 <style lang="scss">
 	.card {
