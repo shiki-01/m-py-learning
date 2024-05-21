@@ -41,13 +41,14 @@
 </div>
 <Gallery class="mt-4 gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 	{#each itemsInItem as item}
-	<div class="card relative h-auto min-h-[64px]" class:flipped={flipped[item.name]} on:click={() => flip(item.name)}>
-		<div class="card-face card-front absolute inset-0">
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<div class="card flex justify-center relative h-auto min-h-[64px]" class:flipped={flipped[item.name]} on:click={() => flip(item.name)}>
+		<div class="card-face w-fit card-front absolute inset-0">
 			<Card>
 				<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{item.name}</h5>
 			</Card>
 		</div>
-		<div class="card-face card-back absolute inset-0">
+		<div class="card-face w-fit card-back absolute">
 			<Card>
 				<div class="card-con">
 					<P class="mb-3 font-normal leading-tight text-gray-700 dark:text-gray-400">{item.description}</P>

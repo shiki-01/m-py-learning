@@ -4,7 +4,7 @@
 	import { page } from '$app/stores';
 
 	let id: string;
-    let itemsInItem = [];
+    let itemsInItem: any[] = [];
 
 	onMount(async () => {
 		const { params } = await $page;
@@ -14,9 +14,7 @@
 			`https://raw.githubusercontent.com/shiki-01/m-py-learning/master/assets/quest/${id}/index.json`
 		)
 			.then((response) => response.json())
-			.then((data: { label: Item[]; }) => {
-				console.log(data);
-
+			.then((data: { label: any[]; }[]) => {
                 itemsInItem = data;
 			});
 	});
