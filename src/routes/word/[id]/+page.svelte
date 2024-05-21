@@ -15,7 +15,7 @@
 		items: Item[];
 	}
 
-	let words: Word[] = [];
+	let data = null;
 	let flipped: { [key: string]: boolean } = {};
 	let id: string;
 	let itemsInItem: Item[] = [];
@@ -31,6 +31,11 @@
 				itemsInItem = data.items;
 				itemsInItem.forEach((item) => (flipped[item.name] = false));
 			});
+
+		const response = await fetch(`https://raw.githubusercontent.com/shiki-01/m-py-learning/master/word/${id}/index.svelte`);
+    	if (response.ok) {
+      		data = await response.text();
+    	}
 	});
 
 	function flip(itemName: string) {
@@ -62,15 +67,19 @@
 						<p class="mb-3 font-normal leading-tight text-gray-700 dark:text-gray-400">
 							{item.description}
 						</p>
-						<p class="mb-3 font-normal leading-tight text-gray-700 dark:text-gray-400">
-							{item.syntax}
-						</p>
 					</div>
 				</Card>
 			</div>
 		</div>
 	{/each}
 </div>
+{#if data}
+  <div>
+    {data}
+  </div>
+{:else}
+  <div>Loading...</div>
+{/if}
 
 <style lang="scss">
 	.card {

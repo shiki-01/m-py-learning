@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { page } from '$app/stores';
+	import icon from '$lib/favicon.png';
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -28,7 +29,7 @@
 <header>
 	<Navbar let:toggle color="primary">
 		<NavBrand href="/">
-			<img src="https://placehold.jp/150x150.png" class="me-3 h-6 sm:h-9" alt="Flowbite Logo" />
+			<img src={icon} class="me-3 h-6 sm:h-9" alt="Flowbite Logo" />
 			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-red-500"
 				>M Py Learning</span
 			>
