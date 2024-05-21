@@ -4,12 +4,17 @@
     "questions": [
         {
             "question": "print関数を使って、Hello World!と表示してください。",
-            "answer": "Hello World!"
+            "advance": "",
+            "answer": "Hello World!",
+            "debug": "",
+            "example": "print('Hello World!')"
         },
         {
             "question": "print関数を使って、Hello Python!と表示してください。変数 a を使用してください",
+            "advance": "a = 'Python'",
             "answer": "Hello Python!",
-            "debug": "a = 'Svelte'"
+            "debug": "a = 'Svelte'",
+            "example": "print('Hello', a, '!')"
         }
     ]
 }
