@@ -41,38 +41,42 @@
 <div class="flex justify-center">
 	<Button class="w-fit" on:click={() => (location.href = `/word/${id}/test`)}>Start Test !</Button>
 </div>
-<div class="grid grid-cols-1 gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3">
+<div class="grid-auto-rows grid grid-cols-1 gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3">
 	{#each itemsInItem as item}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div
-			class="card h-auto min-h-[64px]"
+			class="card relative h-auto min-h-[64px]"
 			class:flipped={flipped[item.name]}
 			on:click={() => flip(item.name)}
 		>
-			<div class="card-face card-front">
+			<div class="card-face card-front absolute inset-0">
 				<Card>
 					<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
 						{item.name}
 					</h5>
 				</Card>
 			</div>
-			<div class="card-face card-back">
+			<div class="card-face card-back absolute inset-0">
 				<Card>
-					<p class="mb-3 font-normal leading-tight text-gray-700 dark:text-gray-400">
-						{item.description}
-						<!-- Change this line -->
-					</p>
+					<div class="card-con">
+						<p class="mb-3 font-normal leading-tight text-gray-700 dark:text-gray-400">
+							{item.description}
+						</p>
+						<p class="mb-3 font-normal leading-tight text-gray-700 dark:text-gray-400">
+							{item.syntax}
+						</p>
+					</div>
 				</Card>
 			</div>
 		</div>
 	{/each}
 </div>
 
-<style>
+<style lang="scss">
 	.card {
 		transform-style: preserve-3d;
 		transition: transform 0.6s;
-		height: 100px;
+		height: 120px;
 		position: relative;
 	}
 	.card.flipped {
