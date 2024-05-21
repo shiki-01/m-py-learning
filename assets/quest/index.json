@@ -1,0 +1,12 @@
+[
+    {
+        "label": "section 1",
+        "id": "section-1",
+        "description": "Pythonの基本的な構文について学びます。"
+    },
+    {
+        "label": "section 2",
+        "id": "section-2",
+        "description": "Pythonでの文字列操作について学びます。"
+    }
+]
