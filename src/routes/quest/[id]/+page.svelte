@@ -18,6 +18,8 @@
                 itemsInItem = data;
 			});
 	});
+
+	$: console.log(itemsInItem);
 </script>
 
 <div class="flex justify-center gap-3">
