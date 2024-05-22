@@ -82,6 +82,7 @@
 		} else {
 			modalContent = 'Quiz finished!';
 			defaultModal = true;
+			window.location.href = `/word/${id}/test/result?correct=${correctAnswersCount}&total=${itemsInItem.length}`;
 		}
 	};
 
