@@ -16,7 +16,7 @@
 	import { page } from '$app/stores';
 	import type { Item } from '$lib/utils/types/word';
 	import type { PageData } from './$types';
-	import { rewriteHTML } from '$lib/utils/middlewares/rewrite-html';
+	import { rewriteHTML, injectComponents } from '$lib/utils/middlewares/rewrite-html';
 
 	export let data: PageData;
 
@@ -35,6 +35,8 @@
 		} else {
 			itemsInItem = [];
 		}
+
+		injectComponents();
 	});
 </script>
 

@@ -66,15 +66,32 @@ type GetsType<T> = {
        */
       example?: any;
     }>;
+
+    export type Quests<T = "get"> = Structure<
+      T,
+      {
+        /**
+         * タイトル
+         */
+        title: string;
+        premiss?: string;
+        debug?: string;
+        /**
+         * タグ
+         */
+        tag?: [];
+      }>;
   
   export type EndPoints = {
     get: {
       words: Words<"get">;
       docs: Docs<"get">;
+      quests: Quests<"get">;
     };
     gets: {
       words: Words<"gets">;
       docs: Docs<"gets">;
+      quests: Quests<"gets">;
     };
     post: {
       words: Words<"post">;

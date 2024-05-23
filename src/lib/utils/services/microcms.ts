@@ -1,6 +1,6 @@
 import { createClient, type MicroCMSQueries } from "microcms-js-sdk";
 import { MICROCMS_SERVICE_DOMAIN, MICROCMS_API_KEY } from "$env/static/private";
-import type { EndPoints } from "$lib/utils/types/microcmsWords";
+import type { EndPoints } from "$lib/utils/types/microcms";
 
 export const microcms = createClient({
   serviceDomain: MICROCMS_SERVICE_DOMAIN,

@@ -1,12 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { Card, Button } from 'flowbite-svelte';
-    import { wordData } from '$lib/store';
     import type { PageData } from '../$types';
 
     export let data: PageData;
-
-    wordData.set(data);
 
     let contentsW: any[] = [];
 
