@@ -2,12 +2,10 @@
 	import { onMount } from 'svelte';
 	import { Card, Button, P, Gallery } from 'flowbite-svelte';
 	import { page } from '$app/stores';
+	import type { Item } from '$lib/utils/types/word';
+	import type { PageData } from './$types';
 
-	interface Item {
-		name: string;
-		description: string;
-		syntax: string;
-	}
+	export let data: PageData;
 
 	let flipped: { [key: string]: boolean } = {};
 	let id: string;
@@ -18,16 +16,12 @@
 		const { params } = await $page;
 		id = params.id;
 
-		fetch(`https://raw.githubusercontent.com/shiki-01/m-py-learning/master/assets/word/${id}/index.json`)
-			.then((response) => response.json())
-			.then((data: { items: Item[]; doc: {} }) => {
-				// 'items'キーの下にある配列を取得
-				itemsInItem = data.items;
-				itemsInItem.forEach((item) => (flipped[item.name] = false));
+		// 'contents'キーの下にある配列を取得し、'sectionid'タグを持つアイテムだけをフィルタリング
+		itemsInItem = data.words.contents.filter((item) => item.tag.includes(id));
+		itemsInItem.forEach((item) => (flipped[item.title] = false));
 
-				// 'doc'キーの下にあるオブジェクトを取得
-				contentData = data.doc;
-			});
+		// 'doc'キーの下にあるオブジェクトを取得
+		contentData = data;
 	});
 
 	function flip(itemName: string) {
@@ -39,26 +33,33 @@
 	<Button class="w-fit" on:click={() => (location.href = `/word/${id}/test`)}>Start Test !</Button>
 	<Button class="w-fit" on:click={() => (location.href = `/word/${id}/doc`)}>Learn more !</Button>
 </div>
-<Gallery class="mt-4 gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+<Gallery class="mt-4 grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 	{#each itemsInItem as item}
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div class="card flex justify-center relative h-auto min-h-[64px]" class:flipped={flipped[item.name]} on:click={() => flip(item.name)}>
-		<div class="card-face w-fit card-front absolute inset-0">
-			<Card>
-				<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{item.name}</h5>
-			</Card>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<div
+			class="card relative flex h-auto min-h-[64px] justify-center"
+			class:flipped={flipped[item.title]}
+			on:click={() => flip(item.title)}
+		>
+			<div class="card-face card-front absolute inset-0 w-fit">
+				<Card>
+					<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+						{item.title}
+					</h5>
+				</Card>
+			</div>
+			<div class="card-face card-back absolute w-fit">
+				<Card>
+					<div class="card-con">
+						<P class="mb-3 font-normal leading-tight text-gray-700 dark:text-gray-400"
+							>{item.descriptionS}</P
+						>
+					</div>
+				</Card>
+			</div>
 		</div>
-		<div class="card-face w-fit card-back absolute">
-			<Card>
-				<div class="card-con">
-					<P class="mb-3 font-normal leading-tight text-gray-700 dark:text-gray-400">{item.description}</P>
-				</div>
-			</Card>
-		</div>
-	</div>
 	{/each}
 </Gallery>
-
 
 <style lang="scss">
 	.card {

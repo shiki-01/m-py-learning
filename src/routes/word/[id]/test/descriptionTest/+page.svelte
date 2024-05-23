@@ -2,12 +2,10 @@
 	import { onMount } from 'svelte';
 	import { Card, Button, Radio, Modal } from 'flowbite-svelte';
 	import { page } from '$app/stores';
+	import type { Item } from '$lib/utils/types/word';
+	import type { PageData } from './$types';
 
-	interface Item {
-		name: string;
-		description: string;
-		syntax: string;
-	}
+	export let data: PageData;
 
 	interface Word {
 		label: string;
@@ -26,14 +24,14 @@
 		const { params } = await $page;
 		id = params.id;
 
-		fetch(`https://raw.githubusercontent.com/shiki-01/m-py-learning/master/assets/word/${id}/index.json`)
-			.then((response) => response.json())
-			.then((data: { items: Item[] }) => {
-				itemsInItem = data.items;
-				// Shuffle the items for random questions
-				itemsInItem.sort(() => Math.random() - 0.5);
-				generateOptions();
-			});
+		const filteredItems = data.words.contents.filter((item) => item.tag.includes(id));
+		if (filteredItems.length > 0) {
+			itemsInItem = filteredItems;
+		} else {
+			itemsInItem = [];
+		}
+
+		generateOptions();
 	});
 
 	function generateOptions() {
@@ -41,13 +39,13 @@
 			return;
 		}
 		// Get all descriptions
-		let allDescriptions = itemsInItem.map((item) => item.description);
+		let allDescriptions = itemsInItem.map((item) => item.descriptionS);
 		// Shuffle the descriptions
 		allDescriptions.sort(() => Math.random() - 0.5);
 		// Get the first three descriptions as incorrect options
 		options = allDescriptions.slice(0, 4); // Modify this line to update the state variable
 		// Get the correct answer
-		let correctAnswer = itemsInItem[currentQuestionIndex].description;
+		let correctAnswer = itemsInItem[currentQuestionIndex].descriptionS;
 		// Check if the correct answer is in the options
 		if (!options.includes(correctAnswer)) {
 			// Remove a random option
@@ -63,38 +61,43 @@
 	let modalContent = '';
 
 	let defaultModal = false;
+	let finalModal = false;
 
 	const checkAnswer = () => {
 		let questionAtTimeOfAnswer = itemsInItem[currentQuestionIndex];
-		if (userAnswer === questionAtTimeOfAnswer.description) {
+		if (userAnswer === questionAtTimeOfAnswer.descriptionS) {
 			// 正解の処理
 			modalContent = '正解！';
 			correctAnswersCount++;
 		} else {
 			// 不正解の処理
-			modalContent = '不正解… 答えは  ' + questionAtTimeOfAnswer.name + '  :  ' + questionAtTimeOfAnswer.description;
+			modalContent = '不正解… 答えは  ' + questionAtTimeOfAnswer.title + '  :  ' + questionAtTimeOfAnswer.descriptionS;
 		}
 		// 次の問題に進む
 		defaultModal = true;
 		currentQuestionIndex++;
 		if (currentQuestionIndex < itemsInItem.length) {
 			generateOptions();
-		} else {
-			modalContent = 'Quiz finished!';
-			defaultModal = true;
-			window.location.href = `/word/${id}/test/result?correct=${correctAnswersCount}&total=${itemsInItem.length}`;
 		}
 	};
 
-	const closeModal = () => {
+	function closeDefaultModal() {
 		defaultModal = false;
-	};
+		defaultModal = false;
+		if (currentQuestionIndex >= itemsInItem.length) {
+			finalModal = true;
+		}
+	}
+
+	function closeFinalModalAndNavigate() {
+		finalModal = false;
+		location.href = `/word/${id}/test/result?correct=${correctAnswersCount}&total=${itemsInItem.length}`;
+	}
 
 	const selectOption = (option: string) => {
 		userAnswer = option;
 	};
 
-	// 初期の選択肢を生成
 	generateOptions();
 </script>
 
@@ -103,22 +106,32 @@
 </div>
 <div class="mt-4 flex justify-center">
 	{#if defaultModal}
-		<Modal on:close={closeModal} title="結果" bind:open={defaultModal} autoclose>
+		<Modal on:close={closeDefaultModal} title="結果" bind:open={defaultModal} autoclose>
 			<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">{modalContent}</p>
 			<svelte:fragment slot="footer">
 				{#if currentQuestionIndex < itemsInItem.length}
-					<Button on:click={closeModal}>Next Question</Button>
+					<Button on:click={closeDefaultModal}>Next Question</Button>
 				{:else}
-					<Button on:click={closeModal}>Close</Button>
+					<Button on:click={closeDefaultModal}>Close</Button>
 				{/if}
 			</svelte:fragment>
 		</Modal>
 	{/if}
+	{#if finalModal}
+			<Modal on:close={closeFinalModalAndNavigate} title="終了" bind:open={finalModal} autoclose>
+				<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+					テストが終了しました。
+				</p>
+				<svelte:fragment slot="footer">
+					<Button on:click={closeFinalModalAndNavigate}>Close</Button>
+				</svelte:fragment>
+			</Modal>
+		{/if}
 	{#if currentQuestionIndex !== undefined && itemsInItem[currentQuestionIndex]}
 		<div class="card h-auto min-h-[64px]">
 			<Card class="flex gap-2 pb-4">
 				<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-					{itemsInItem[currentQuestionIndex].name}
+					{itemsInItem[currentQuestionIndex].title}
 				</h5>
 				{#each options as option}
 					<Radio name="answer" value={option} on:click={() => selectOption(option)}>{option}</Radio>

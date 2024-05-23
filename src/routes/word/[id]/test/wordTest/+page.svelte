@@ -2,12 +2,10 @@
 	import { onMount } from 'svelte';
 	import { Card, Button, Input, Modal } from 'flowbite-svelte';
 	import { page } from '$app/stores';
+	import type { Item } from '$lib/utils/types/word';
+	import type { PageData } from '../$types';
 
-	interface Item {
-		name: string;
-		description: string;
-		syntax: string;
-	}
+	export let data: PageData;
 
 	interface Word {
 		label: string;
@@ -26,34 +24,43 @@
 		const { params } = await $page;
 		id = params.id;
 
-		fetch(`https://raw.githubusercontent.com/shiki-01/m-py-learning/master/assets/word/${id}/index.json`)
-			.then((response) => response.json())
-			.then((data: { items: Item[] }) => {
-				itemsInItem = data.items;
-				// Shuffle the items for random questions
-				itemsInItem.sort(() => Math.random() - 0.5);
-			});
+		const filteredItems = data.words.contents.filter((item) => item.tag.includes(id));
+		if (filteredItems.length > 0) {
+			// itemsプロパティが存在しないため、代わりにtitleを設定します
+			itemsInItem = filteredItems;
+		} else {
+			itemsInItem = [];
+		}
 	});
 
 	let defaultModal = false;
+	let finalModal = false;
 	let modalContent = '';
 
 	function checkAnswer() {
 		const item = itemsInItem[currentQuestionIndex];
-		if (userAnswers[item.name] === item.name) {
+		if (userAnswers[item.title] === item.title) {
 			modalContent = '正解！';
 			correctAnswersCount++;
 		} else {
-			modalContent = '間違い！ 正解は： ' + item.name;
+			modalContent = '間違い！ 正解は： ' + item.title;
 		}
 		// Move to the next question
 		defaultModal = true;
 		currentQuestionIndex++;
+	}
+
+	function closeDefaultModal() {
+		defaultModal = false;
+		defaultModal = false;
 		if (currentQuestionIndex >= itemsInItem.length) {
-			modalContent = 'Test completed!';
-			currentQuestionIndex = 0; // Reset for the next test
-			window.location.href = `/word/${id}/test/result?correct=${correctAnswersCount}&total=${itemsInItem.length}`;
+			finalModal = true;
 		}
+	}
+
+	function closeFinalModalAndNavigate() {
+		finalModal = false;
+		location.href = `/word/${id}/test/result?correct=${correctAnswersCount}&total=${itemsInItem.length}`;
 	}
 
 	let currentQuestion = itemsInItem[currentQuestionIndex];
@@ -69,23 +76,31 @@
 			<div class="card h-auto min-h-[64px]">
 				<Card class="gap-3">
 					<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-						{currentQuestion.description}
+						{currentQuestion.descriptionS}
 					</h5>
-					<Input bind:value={userAnswers[currentQuestion.name]} placeholder="Enter the word here" />
+					<Input
+						bind:value={userAnswers[currentQuestion.title]}
+						placeholder="Enter the word here"
+					/>
 					<Button on:click={checkAnswer}>Check Answer</Button>
 				</Card>
 			</div>
 		{/if}
 		{#if defaultModal}
-			<Modal
-				on:close={() => (defaultModal = false)}
-				title="結果"
-				bind:open={defaultModal}
-				autoclose
-			>
+			<Modal on:close={closeDefaultModal} title="結果" bind:open={defaultModal} autoclose>
 				<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">{modalContent}</p>
 				<svelte:fragment slot="footer">
-					<Button on:click={() => (defaultModal = false)}>Close</Button>
+					<Button on:click={closeDefaultModal}>Close</Button>
+				</svelte:fragment>
+			</Modal>
+		{/if}
+		{#if finalModal}
+			<Modal on:close={closeFinalModalAndNavigate} title="終了" bind:open={finalModal} autoclose>
+				<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+					テストが終了しました。
+				</p>
+				<svelte:fragment slot="footer">
+					<Button on:click={closeFinalModalAndNavigate}>Close</Button>
 				</svelte:fragment>
 			</Modal>
 		{/if}
