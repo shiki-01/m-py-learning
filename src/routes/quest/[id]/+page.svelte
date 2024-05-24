@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
+	import { rewriteHTML } from '$lib/utils/middlewares/rewrite-html';
 
 	export let data: PageData;
 
@@ -16,9 +17,13 @@
 	let defaultModal: boolean = false;
 	let finalModal: boolean = false;
 
+	let showModal: boolean = false;
+
 	onMount(async () => {
 		const { params } = await $page;
 		id = params.id;
+
+		showModal = window.innerWidth < 640;
 
 		const filteredItems = data.quests.contents.filter((item) => item.tag.includes(id));
 
@@ -111,19 +116,35 @@
 	};
 </script>
 
-<div class="flex justify-center gap-3">
+<div class="flex justify-center gap-3 sm::flex-col">
 	{#if itemsInItem[currentQuestionIndex]}
-		<div>
-			<Heading level="2" class="mb-4">{itemsInItem[currentQuestionIndex].title}</Heading>
-			{#if itemsInItem[currentQuestionIndex].premiss}
-				<P>{itemsInItem[currentQuestionIndex].premiss}</P>
-			{/if}
-		</div>
-		<div class="flex justify-center">
-			<Textarea bind:value={userAnswer} placeholder="Answer" class="w-96" />
-			<Button on:click={checkAnswer}>Check Answer</Button>
-		</div>
-	{/if}
+        <div class="sm:hidden">
+            <Button on:click={() => (showModal = true)}>Show Description</Button>
+            <Modal bind:open={showModal}>
+                {#if itemsInItem[currentQuestionIndex].description}
+                    <P>{@html rewriteHTML(itemsInItem[currentQuestionIndex].description)}</P>
+                {/if}
+            </Modal>
+        </div>
+        <div>
+            <Heading level="2" class="mb-4">{itemsInItem[currentQuestionIndex].title}</Heading>
+            {#if itemsInItem[currentQuestionIndex].premiss}
+                <P>{itemsInItem[currentQuestionIndex].premiss}</P>
+            {/if}
+            <div class="hidden sm:block">
+                {#if itemsInItem[currentQuestionIndex].description}
+                    <P>{@html rewriteHTML(itemsInItem[currentQuestionIndex].description)}</P>
+                {/if}
+            </div>
+        </div>
+        <div class="flex flex-col justify-center gap-4">
+            <div>
+                <Button on:click={checkAnswer}>Check Answer</Button>
+                <Button>Reset</Button>
+            </div>
+            <Textarea bind:value={userAnswer} placeholder="Answer" class="w-96" />
+        </div>
+    {/if}
 	{#if defaultModal}
 		<Modal on:close={() => (defaultModal = false)} title="Result" bind:open={defaultModal} autoclose>
 			<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">{modalContent}</p>
