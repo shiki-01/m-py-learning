@@ -20,7 +20,8 @@
 		const segments = pathname.split('/').filter(Boolean);
 		breadcrumbs = segments.map((segment: any, index: number) => {
 			const href = '/' + segments.slice(0, index + 1).join('/');
-			const capitalizedSegment = segment.charAt(0).toUpperCase() + segment.slice(1);
+			const decodedSegment = decodeURIComponent(segment);
+			const capitalizedSegment = decodedSegment.charAt(0).toUpperCase() + decodedSegment.slice(1);
 			return { segment: capitalizedSegment, href };
 		});
 	}
@@ -55,7 +56,7 @@
 	</Breadcrumb>
 </div>
 <main class="p-8 dark:bg-gray-600">
-    <slot />
+	<slot />
 </main>
 
 <style lang="scss">

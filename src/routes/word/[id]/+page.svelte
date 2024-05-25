@@ -17,7 +17,7 @@
 		id = params.id;
 
 		// 'contents'キーの下にある配列を取得し、'sectionid'タグを持つアイテムだけをフィルタリング
-		itemsInItem = data.words.contents.filter((item) => item.tag.includes(id));
+		itemsInItem = data.words.contents.filter((item) => item.tag.includes(id)).reverse();
 		itemsInItem.forEach((item) => (flipped[item.title] = false));
 
 		// 'doc'キーの下にあるオブジェクトを取得

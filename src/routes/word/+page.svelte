@@ -18,7 +18,7 @@
             return acc;
         }, {});
 
-        contentsW = Object.values(grouped).map(group => group[0]);
+        contentsW = Object.values(grouped).map(group => group[0]).reverse();
     });
 </script>
 
