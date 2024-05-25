@@ -2,10 +2,9 @@ import { addAnchorCopy } from "./rewriters/add-anchor-copy";
 import { processFigure } from "./rewriters/figure";
 import { highlight } from "./rewriters/highlight";
 import { injectIconify } from "./rewriters/icons";
-import { injectFlowbite } from "./rewriters/table";
 
 export function injectComponents(): void {
-  const components: Array<() => void> = [injectIconify, injectFlowbite];
+  const components: Array<() => void> = [injectIconify];
 
   components.forEach((component) => {
     component();
@@ -25,11 +24,6 @@ export function rewriteHTML(
   // eslint-disable-next-line no-restricted-syntax
   for (const rewriter of writers) {
     result = rewriter(result ?? "");
-  }
-
-  // Check if the HTML contains a table tag
-  if (result.includes('<table>')) {
-    injectFlowbite();
   }
 
   return result;

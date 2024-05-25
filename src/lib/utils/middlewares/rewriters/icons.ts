@@ -1,8 +1,4 @@
 import Icon from "@iconify/svelte";
-import type { ComponentProps } from "svelte";
-
-type IconProps = ComponentProps<Icon>["icon"];
-
 
 export function injectIconify(): void {
     if (document == null) {

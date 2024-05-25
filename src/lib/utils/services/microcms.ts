@@ -11,6 +11,7 @@ export async function getContentList<T extends keyof EndPoints["gets"]>(
   key: T,
   queries: MicroCMSQueries = {},
 ): Promise<EndPoints["gets"][T]> {
+
   return microcms.get({
     endpoint: key,
     queries,

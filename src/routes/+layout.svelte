@@ -37,17 +37,15 @@
 		</NavBrand>
 		<NavHamburger on:click={toggle} />
 		<NavUl>
-			<DarkMode />
-			<NavUl>
-				<NavLi href="/" active={true}>Home</NavLi>
-				<NavLi href="/about">About</NavLi>
-				<NavLi href="/word">Word</NavLi>
-				<NavLi href="/quest">Quest</NavLi>
-			</NavUl>
+			<NavLi><DarkMode /></NavLi>
+			<NavLi class="h-full nav-li" href="/" active={true}>Home</NavLi>
+			<NavLi class="h-full nav-li" href="/about">About</NavLi>
+			<NavLi class="h-full nav-li" href="/word">Word</NavLi>
+			<NavLi class="h-full nav-li" href="/quest">Quest</NavLi>
 		</NavUl>
 	</Navbar>
 </header>
-<div class="bread dark:bg-gray-700">
+<div class="bread overflow-x-auto dark:bg-gray-700">
 	<Breadcrumb aria-label="Default breadcrumb example">
 		<BreadcrumbItem href="/" home>Home</BreadcrumbItem>
 		{#each breadcrumbs as { segment, href }}
@@ -62,6 +60,10 @@
 <style lang="scss">
 	:global(body) {
 		@apply dark:bg-gray-600;
+	}
+	:global(.nav-li) {
+		display: flex;
+		align-items: center;
 	}
 	.bread {
 		padding: 1rem;
