@@ -1,10 +1,9 @@
 import { load } from "cheerio";
 import hljs from "highlight.js";
-import "highlight.js/styles/github-dark.css";
 
 export function highlight(html: string): string {
   const $ = load(html);
-  const $preCodeBlocks = $("div :has(pre code)");
+  const $preCodeBlocks = $("pre");
 
   $preCodeBlocks.each((_, preCodeBlock) => {
     const $code = $(preCodeBlock).find("pre code");

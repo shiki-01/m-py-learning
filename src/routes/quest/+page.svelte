@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { Card, Button } from 'flowbite-svelte';
 	import type { PageData } from '../$types';
+    import src from '$lib/pleasew.png';
 
 	export let data: PageData;
 
