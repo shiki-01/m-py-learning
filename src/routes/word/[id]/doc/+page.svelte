@@ -67,7 +67,7 @@
 		}
 	}
 	:global(code) {
-		@apply text-sm bg-gray-100 dark:bg-gray-800 py-1.5 px-2 mx-1 rounded-lg dark:text-gray-50;
+		@apply text-sm bg-gray-200 dark:bg-gray-800 py-1.5 px-2 mx-1 rounded-lg dark:text-gray-50;
 	}
 	:global(.article h2) {
 		@apply mb-4 text-3xl font-bold dark:text-gray-50;
@@ -95,7 +95,7 @@
 		}
 
 		:global(th) {
-			@apply bg-gray-100 px-5 py-3 text-xs uppercase text-gray-600 dark:bg-gray-700 dark:text-gray-400;
+			@apply bg-gray-200 px-5 py-3 text-xs uppercase text-gray-600 dark:bg-gray-700 dark:text-gray-400;
 
 			:global(p) {
 				@apply m-0 text-sm;
@@ -116,7 +116,7 @@
 			}
 
 			&:hover :global(td) {
-				@apply bg-gray-100 dark:bg-gray-600;
+				@apply bg-gray-200 dark:bg-gray-600;
 			}
 		}
 	}
