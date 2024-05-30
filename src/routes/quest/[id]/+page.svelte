@@ -80,7 +80,7 @@
 			if (currentQuestion.premiss) {
 				if (currentQuestion.debug) {
 					await window.pyodide.runPythonAsync(currentQuestion.debug + `\n` + userAnswer);
-					console.log(currentQuestion.debug + `\n` + userAnswer)
+					console.log(currentQuestion.debug + `\n` + userAnswer);
 				} else {
 					await window.pyodide.runPythonAsync(currentQuestion.premiss + `\n` + userAnswer);
 				}
@@ -120,37 +120,44 @@
 	};
 </script>
 
-<div class="flex justify-center gap-3 sm:flex-row">
+<div class="grid grid-cols-1 items-start gap-10 md:grid-cols-2">
 	{#if itemsInItem[currentQuestionIndex]}
-        <div class="sm:hidden">
-            <Button on:click={() => (showModal = true)}>Show Description</Button>
-            <Modal bind:open={showModal}>
-                {#if itemsInItem[currentQuestionIndex].description}
-                    <P>{@html rewriteHTML(itemsInItem[currentQuestionIndex].description)}</P>
-                {/if}
-            </Modal>
-        </div>
-        <div>
-            <Heading level="2" class="mb-4">{itemsInItem[currentQuestionIndex].title}</Heading>
-            {#if itemsInItem[currentQuestionIndex].premiss}
-                <P>{itemsInItem[currentQuestionIndex].premiss}</P>
-            {/if}
-            <div class="hidden sm:block">
-                {#if itemsInItem[currentQuestionIndex].description}
-                    <P class="article">{@html rewriteHTML(itemsInItem[currentQuestionIndex].description)}</P>
-                {/if}
-            </div>
-        </div>
-        <div class="flex flex-col justify-center gap-4">
-            <div>
-                <Button on:click={checkAnswer}>Check Answer</Button>
-                <Button>Reset</Button>
-            </div>
-            <Textarea bind:value={userAnswer} placeholder="Answer" class="w-96" />
-        </div>
-    {/if}
+		<div class="md:hidden">
+			<Button on:click={() => (showModal = true)}>Show Description</Button>
+			<Modal bind:open={showModal}>
+				{#if itemsInItem[currentQuestionIndex].description}
+					<P class="article">{@html rewriteHTML(itemsInItem[currentQuestionIndex].description)}</P>
+				{/if}
+			</Modal>
+		</div>
+		<div class="overflow-y-auto">
+			<Heading level="2" class="mb-4">{itemsInItem[currentQuestionIndex].title}</Heading>
+			<div class="hidden md:block">
+				{#if itemsInItem[currentQuestionIndex].description}
+					<P class="article">{@html rewriteHTML(itemsInItem[currentQuestionIndex].description)}</P>
+				{/if}
+			</div>
+		</div>
+		<div class="flex flex-col justify-center gap-4">
+			<div>
+				<Button on:click={checkAnswer}>Check Answer</Button>
+				<Button>Reset</Button>
+			</div>
+			{#if itemsInItem[currentQuestionIndex].premiss}
+				<div class="article">
+					<pre><code>{itemsInItem[currentQuestionIndex].premiss}</code></pre>
+				</div>
+			{/if}
+			<Textarea bind:value={userAnswer} placeholder="Answer" class="w-full" />
+		</div>
+	{/if}
 	{#if defaultModal}
-		<Modal on:close={() => (defaultModal = false)} title="Result" bind:open={defaultModal} autoclose>
+		<Modal
+			on:close={() => (defaultModal = false)}
+			title="Result"
+			bind:open={defaultModal}
+			autoclose
+		>
 			<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">{modalContent}</p>
 			<svelte:fragment slot="footer">
 				{#if currentQuestionIndex < itemsInItem.length}
@@ -185,7 +192,7 @@
 		}
 	}
 	:global(code) {
-		@apply text-sm bg-gray-200 dark:bg-gray-800 py-1.5 px-2 mx-1 rounded-lg dark:text-gray-50;
+		@apply mx-1 rounded-lg bg-gray-200 px-2 py-1.5 text-sm dark:bg-gray-800 dark:text-gray-50;
 	}
 	:global(.article h2) {
 		@apply mb-4 text-3xl font-bold dark:text-gray-50;
